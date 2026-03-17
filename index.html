@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Age Calculator</title>
+  <style>
+    body { font-family: 'Segoe UI', sans-serif; display: flex; justify-content: center; align-items: center; height: 100vh; background-color: #f4f7f6; margin: 0; }
+    .calculator { background: white; padding: 30px; border-radius: 12px; box-shadow: 0 5px 15px rgba(0,0,0,0.1); text-align: center; width: 300px; }
+    
+    /* Thanks message styling */
+    #thanksMsg {
+      background-color: #d4edda;
+      color: #155724;
+      padding: 10px;
+      border-radius: 8px;
+      margin-bottom: 15px;
+      border: 1px solid #c3e6cb;
+      display: none; /* Survaatila hidden */
+      font-weight: bold;
+      font-size: 0.9em;
+    }
+
+    input[type="date"] { padding: 10px; margin: 15px 0; width: 90%; border: 1px solid #ddd; border-radius: 6px; }
+    button { padding: 12px; background-color: #007bff; color: white; border: none; border-radius: 6px; cursor: pointer; width: 100%; font-weight: bold; }
+  </style>
+</head>
+<body onload="checkMessage()">
+
+  <div class="calculator">
+    <div id="thanksMsg">Thanks for using this app! 😊</div>
+
+    <h1>Age Calculator</h1>
+    <p>Select your Date of Birth</p>
+    <input type="date" id="dob" required>
+    <button onclick="calculateAge()">Calculate Age</button>
+  </div>
+
+  <script>
+    function calculateAge() {
+      const dobInput = document.getElementById('dob').value;
+      if (!dobInput) {
+        alert("Please select a date!");
+        return;
+      }
+      // Result page var jataana date sobat pathvane
+      window.location.href = "result.html?dob=" + dobInput;
+    }
+
+    // URL madhe 'thanks' aahe ka te check karne
+    function checkMessage() {
+      const urlParams = new URLSearchParams(window.location.search);
+      if (urlParams.get('msg') === 'thanks') {
+        const msgDiv = document.getElementById('thanksMsg');
+        msgDiv.style.display = 'block';
+        
+        // 4 sekandaanantar message aapohaap hidden honyasaathi
+        setTimeout(() => {
+          msgDiv.style.display = 'none';
+        }, 4000);
+      }
+    }
+  </script>
+</body>
+</html>

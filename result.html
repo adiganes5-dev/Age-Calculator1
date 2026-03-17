@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Detailed Result</title>
+  <style>
+    body { font-family: 'Segoe UI', sans-serif; display: flex; justify-content: center; align-items: center; min-height: 100vh; background-color: #f0f2f5; margin: 0; padding: 20px; }
+    .result-card { background: white; padding: 25px; border-radius: 15px; box-shadow: 0 8px 25px rgba(0,0,0,0.1); text-align: center; width: 100%; max-width: 380px; }
+    h2 { color: #007bff; margin-bottom: 15px; }
+    .info-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 20px; }
+    .box { background: #f8f9fa; padding: 10px; border-radius: 8px; border-left: 4px solid #28a745; text-align: left; }
+    .label { font-size: 0.8em; color: #666; display: block; }
+    .val { font-size: 1.1em; font-weight: bold; color: #333; }
+    .live-status { background: #212529; color: #00ff00; padding: 15px; border-radius: 10px; font-family: monospace; margin-top: 10px; }
+    button { margin-top: 20px; padding: 12px 25px; background: #007bff; color: white; border: none; border-radius: 8px; cursor: pointer; font-weight: bold; width: 100%; }
+  </style>
+</head>
+<body>
+
+  <div class="result-card">
+    <h2>Age Summary</h2>
+    <div id="display">
+       <div class="info-grid" id="main-stats"></div>
+       <div class="live-status" id="live-stats"></div>
+    </div>
+    <button onclick="window.location.href='index.html?msg=thanks'">← Go Back</button>
+  </div>
+
+  <script>
+    function updateAge() {
+      const urlParams = new URLSearchParams(window.location.search);
+      const dobInput = urlParams.get('dob');
+
+      if (!dobInput) return;
+
+      const dob = new Date(dobInput);
+      const now = new Date();
+      const diffMs = now - dob;
+
+      // Age Logic
+      let years = now.getFullYear() - dob.getFullYear();
+      let months = now.getMonth() - dob.getMonth();
+      let days = now.getDate() - dob.getDate();
+      if (days < 0) { months--; days += new Date(now.getFullYear(), now.getMonth(), 0).getDate(); }
+      if (months < 0) { years--; months += 12; }
+
+      // Cumulative Calculations
+      const totalSeconds = Math.floor(diffMs / 1000);
+      const totalMinutes = Math.floor(totalSeconds / 60);
+      const totalHours = Math.floor(totalMinutes / 60);
+      const totalDays = Math.floor(totalHours / 24);
+      const totalMonthsAll = (years * 12) + months;
+
+      // HTML update (Weeks kadhun takle ahet)
+      document.getElementById('main-stats').innerHTML = `
+        <div class="box"><span class="label">Years</span><span class="val">${years}</span></div>
+        <div class="box"><span class="label">Months</span><span class="val">${months}</span></div>
+        <div class="box"><span class="label">Total Months</span><span class="val">${totalMonthsAll}</span></div>
+        <div class="box"><span class="label">Total Days</span><span class="val">${totalDays}</span></div>
+        <div class="box"><span class="label">Total Hours</span><span class="val">${totalHours.toLocaleString()}</span></div>
+        <div class="box"><span class="label">Days Left</span><span class="val">${days}</span></div>
+      `;
+
+      document.getElementById('live-stats').innerHTML = `
+        <div style="font-size: 0.9em;">Total Minutes: ${totalMinutes.toLocaleString()}</div>
+        <div style="font-size: 1.1em; color: #ffeb3b; margin-top: 5px;">Seconds: ${totalSeconds.toLocaleString()}</div>
+      `;
+    }
+
+    setInterval(updateAge, 1000);
+    updateAge();
+  </script>
+</body>
+</html>
